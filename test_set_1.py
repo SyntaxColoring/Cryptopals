@@ -15,4 +15,14 @@ def test_decode_single_byte_xor():
     ciphertext = bytes.fromhex("1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736")
     plaintext = b"Cooking MC's like a pound of bacon"
     decodings = set_1.decode_single_byte_xor(ciphertext)
+    for d in decodings[:5]:
+        print(d)
     assert plaintext in decodings[:5]
+
+def test_detect_single_byte_xor():
+    with open("4.txt") as file:
+        ciphertexts = [bytes.fromhex(l.strip()) for l in file.readlines()]
+    decodings = sum([set_1.decode_single_byte_xor(c)[:5] for c in ciphertexts], [])
+    decodings.sort(key=set_1.score_decoding, reverse=False)
+    for d in decodings[:10]:
+        print(set_1.score_decoding(d), d)

@@ -15,40 +15,42 @@ def score_decoding(decoding):
     # English letter frequencies stolen from 
     # http://pi.math.cornell.edu/~mec/2003-2004/cryptography/subs/frequencies.html
     expected_frequencies = {
-        "E": 12.02,
-        "T": 9.10,
-        "A": 8.12,
-        "O": 7.68,
-        "I": 7.31,
-        "N": 6.95,
-        "S": 6.28,
-        "R": 6.02,
-        "H": 5.92,
-        "D": 4.32,
-        "L": 3.98,
-        "U": 2.88,
-        "C": 2.71,
-        "M": 2.61,
-        "F": 2.30,
-        "Y": 2.11,
-        "W": 2.09,
-        "G": 2.03,
-        "P": 1.82,
-        "B": 1.49,
-        "V": 1.11,
-        "K": 0.69,
-        "X": 0.17,
-        "Q": 0.11,
-        "J": 0.10,
-        "Z": 0.07
+        "E": 0.120272,
+        "T": 0.091044,
+        "A": 0.081290,
+        "O": 0.076861,
+        "I": 0.073101,
+        "N": 0.069522,
+        "S": 0.062848,
+        "R": 0.060251,
+        "H": 0.059252,
+        "D": 0.043219,
+        "L": 0.039811,
+        "U": 0.028795,
+        "C": 0.027131,
+        "M": 0.026132,
+        "F": 0.023053,
+        "Y": 0.021149,
+        "W": 0.020962,
+        "G": 0.020270,
+        "P": 0.018201,
+        "B": 0.014902,
+        "V": 0.011082,
+        "K": 0.006900,
+        "X": 0.001729,
+        "Q": 0.001125,
+        "J": 0.001032,
+        "Z": 0.000066,
     }
     frequencies = letter_frequencies(decoding)
     sum_of_squares = 0
     for letter, actual in frequencies.items():
         expected = expected_frequencies.get(letter, 0)
-        sum_of_squares += (expected - actual)**2
+        assert 0 <= actual <= 1
+        assert 0 <= expected <= 1
+        sum_of_squares += (expected-actual)**2
     return sum_of_squares
 
 def decode_single_byte_xor(encoded_bytes):
     decodings = [bytes(b^key for b in encoded_bytes) for key in range(256)]
-    return sorted(decodings, key=score_decoding, reverse=True)
+    return sorted(decodings, key=score_decoding)
